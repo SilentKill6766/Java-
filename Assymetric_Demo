@@ -1,0 +1,81 @@
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.security.*;
+import cryptix.jce.provider.CryptixCrypto;
+
+public class Assymetric_Demo {
+    static void Encrypt(String Alg, String Mode,String Padding )
+        throws NoSuchAlgorithmException,
+            InvalidKeyException,
+            IllegalBlockSizeException,
+            NoSuchPaddingException,
+            BadPaddingException,
+            InvalidAlgorithmParameterException,
+            NoSuchProviderException
+    { System.out.println("\nDemo of "+Alg+" "+Padding);
+        Cipher cipher = Cipher.getInstance("RSA/CBC/PKCS5Padding");
+
+        SecureRandom secureRandom = new SecureRandom();
+        int keyBitSize = 256;
+
+        int keyBitSize1 = keyBitSize;
+        keyGenerator.init(keyBitSize, secureRandom);
+    KeyPairgenerator Kgen = KeyPairGenerator.getInstance(Alg);
+    Kgen.initialize(512);
+
+    KeyPair kpair = Kgen.generateKeyPair();
+Cipher cipher;
+
+    // Create the cipher
+        cipher = Cipher.getInstance(Alg+"/"+Mode+"/"+Padding);
+        // Initialize the cipher for encryption
+        cipher.init(Cipher.ENCRYPT_MODE, kpair.getPublic());
+
+        // Our cleartext
+        byte[] cleartext = "Этот текст будет зашифрован" .getBytes();
+
+        System.out.println("PlainText: "+To_Hex(cleartext));
+
+        // Encrypt the cleartext
+        byte[] ciphertext = cipher.doFinal(cleartext);
+
+        System.out.println("DecryptedText: "+To_Hex(ciphertext));
+        cipher.init(Cipher.DECRYPT_MODE, kpair.getPrivate());
+
+        // Decrypt the ciphertext
+        byte[] cleartext1 = cipher.doFinal(ciphertext);
+
+        System.out.println("DecryptedText: "+To_Hex(cleartext1));
+
+
+
+
+    }
+}public static void main (String[] args)
+        throws NoSuchAlgorithmException,
+        NoSuchProviderException,
+        InvalidAlgorithmParameterException,
+        InvalidKeyException,
+        IllegalBlockSizeException,
+        NoSuchPaddingException,
+        BadPaddingException
+{
+    Provider c_je = new CryptixCrypto();
+    Provider c_jce;
+    int result = Security.addProvider(c_jce);
+    if (result==1)
+    { System.out.println("Provider already exists. \n"); }
+    else
+    { System.out.println("Provider added. \n");}
+
+    Encrypt("ElGamal", "ECB","PKCS#1");
+    Encrypt ("RSA", "ECB", "PKCS#1");
+
+
+}
+
+}
+
+
